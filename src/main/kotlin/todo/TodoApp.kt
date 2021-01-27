@@ -65,7 +65,7 @@ class TodoApp {
         return ""
     }
 
-    private fun chooseCategoryList():String{ //To choose catagory list
+    private fun chooseCategoryList():String{ //To choose category list
         println("Choose list to add \n1. Personal \n2. Shopping \n3. Wishlist \n4. Work \n5. Custom")
         val lRead = Scanner(System.`in`)
         var lReason =""
@@ -117,45 +117,42 @@ class TodoApp {
         if(inDateFormat2(lDate)){//To check whether date is in date format2
             return lDate
         }
-        println("enter valid date")
 
         return getValidDate()
     }
 
     private fun inDateFormat2(pDate: String):Boolean {//To check whether date is in date format2
         mDateFormat2.isLenient = false
-        return try {
+        try {
             mDateFormat2.parse(pDate)
             if(System.currentTimeMillis()- 1000*60*60*24>mDateFormat2.parse(pDate).time){
-                println("please enter valid date")
-                getValidDate()
+                println("Invalid date or The date you entered is already passed away")
+                return false
             }
-            true
+            return true
         } catch (e: ParseException) {
-            false
+            return false
         }
 
     }
 
     private fun inDateFormat1(pDate: String):Boolean {//To check whether date is in date format1
         mDateFormat.isLenient = false
-        return try {
+        try {
             mDateFormat.parse(pDate)
             if(System.currentTimeMillis()- 1000*60*60*24>mDateFormat.parse(pDate).time){ //date is past
-                println("please enter valid date")
-                getValidDate()
+                println("Invalid date or The date you entered is already passed away")
+                return false
             }
-            true
+            return true
         } catch (e: ParseException) {
-            false
+            return false
         }
     }
 
     private fun getValidTime(pDate:String):String{//To check whether time is in time format
-        //var timeString = "09:45 PM"
         val lRead = Scanner(System.`in`)
         val lTime = lRead.nextLine()
-
         val timeFormat: DateFormat = SimpleDateFormat("h:mm a")
         timeFormat.isLenient = false
         try {
@@ -244,7 +241,7 @@ class TodoApp {
         }
     }
 
-    fun doTheTask() { //Function to display options to be performed on apllication
+    fun doTheTask() { //Function to display options to be performed on application
         println()
         println("---------------------------\n1. Add new TODO list \n2. Display \n3. Edit \n4. Delete \n5. Exit\n----------------------------")
         println()
@@ -264,10 +261,27 @@ class TodoApp {
             2 -> displayTodoList()
             3 -> editList()
             4 -> deleteRecord()
-            5 -> return
+            5 -> exitProgram()
             else->{
                 println("choose valid operation")
                 doTheTask()
+            }
+        }
+    }
+
+    private fun exitProgram(){
+        println("Do you want to exit ? \n1.Yes \n2.No")
+        val lRead = Scanner(System.`in`)
+        var lOption = 0
+        if(lRead.hasNextInt()){
+            lOption = lRead.nextInt()
+        }
+        when(lOption){
+            1->return
+            2->doTheTask()
+            else->{
+                println("Enter valid option")
+                exitProgram()
             }
         }
     }
@@ -276,12 +290,11 @@ class TodoApp {
         viewTodoList()
         if(mTodoTaskList.isEmpty()){
             println("There are no records to delete")
-            doTheTask()
         }else{
             val lRecord = getRecord()
             mTodoTaskList.remove(lRecord)
-            doTheTask()
         }
+        doTheTask()
     }
 
     private fun checkEditList(){ //Function to check whether list to edit is empty or not
@@ -289,7 +302,6 @@ class TodoApp {
             viewTodoList()
         }else{
             println("“There is no TODO List to Edit”")
-            doTheTask()
         }
     }
 
@@ -316,7 +328,7 @@ class TodoApp {
         return lRecord
     }
 
-    private fun editList(){ //Function to give privilliages to edit list
+    private fun editList(){ //Function to give access to edit list
        checkEditList()
        if(mTodoTaskList.isEmpty()){
            doTheTask()
