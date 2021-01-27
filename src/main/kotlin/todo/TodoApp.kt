@@ -389,11 +389,11 @@ class TodoApp {
             lOption = lRead.nextInt()
         }else{
             println("please enter a number")
-            getOption()
+            getOptionCancel()
         }
         if(lOption==0 || lOption>6){
             println("Please choose number in given options")
-            getOption()
+            getOptionCancel()
         }
         return lOption
     }
